@@ -123,6 +123,21 @@ class BinaryHeap:
         self.A.append(xNode) #Append as last
         self.increase_key(self.size - 1, k) #Increase key value
 
+    def change_key(self, i, k):
+        """Change priority of element i to k"""
+        self.A[i].key = k #Update key
+
+        if self.isMax: #Is max heap
+            while i > 0 and self.A[i // 2].key < self.A[i].key:
+                #While a swap based on the key change needs to be done
+                self.A[i // 2], self.A[i] = self.A[i], self.A[i // 2] #Swap
+                i = i // 2 #Update i with parent (Swap happened)
+        else: #Is min heap
+            while i > 0 and self.A[i // 2].key > self.A[i].key:
+                #While a swap based on the key change needs to be done
+                self.A[i // 2], self.A[i] = self.A[i], self.A[i // 2] #Swap
+                i = i // 2 #Update i with parent (Swap happened)
+
     def printHeapArrayRepresentation(self):
         print("Heap array: [")
         for node in self.A:
@@ -135,10 +150,10 @@ class BinaryMaxHeap(BinaryHeap):
 
     Methods:
     ---------------
-    maximum() : T
-        Get value of maximum. Complexity: O(1)
-    extract_max() : T
-        Extract and return the value of maximum. Complexity: O(logn)
+    maximum() : (T, key)
+        Get maximum node. Complexity: O(1)
+    extract_max() : (T, key)
+        Extract and return the maximum node. Complexity: O(logn)
     
     """
     def maximum(self):
@@ -146,7 +161,7 @@ class BinaryMaxHeap(BinaryHeap):
         if self.size <= 0: #Empty check
             return None
 
-        return self.A[0].value #Return value
+        return self.A[0].value, self.A[0].key #Return node
     
     def extract_max(self):
         """Extract max and get value of it"""
@@ -158,7 +173,7 @@ class BinaryMaxHeap(BinaryHeap):
         self.size = self.size - 1 #Update size
         self.heapify(0) #Heapify from 0
 
-        return item #Return item
+        return item.value, item.key #Return item
 
 
 class BinaryMinHeap(BinaryHeap):
@@ -166,19 +181,19 @@ class BinaryMinHeap(BinaryHeap):
 
     Methods:
     ---------------
-    minimum() : T
-        Get value of minimum. Complexity: O(1)
-    extract_min() : T
-        Extract and return the value of minimum. Complexity: O(logn)
+    minimum() : (T, key)
+        Get minimum node. Complexity: O(1)
+    extract_min() : (T, key)
+        Extract and return the minimum node. Complexity: O(logn)
     """
-    def minimum(self):
+    def minimum(self) -> HeapNode:
         """Get value of minimum"""
         if self.size <= 0: #Empty check
             return None
 
-        return self.A[0].value #Return value
+        return self.A[0].value, self.A[0].key #Return node
     
-    def extract_min(self):
+    def extract_min(self) -> HeapNode:
         """Extract min and get value of it"""
         if self.size <= 0: #Empty check
             return None
@@ -188,4 +203,4 @@ class BinaryMinHeap(BinaryHeap):
         self.size = self.size - 1 #Update size
         self.heapify(0) #Heapify from 0
 
-        return item #Return item
+        return item.value, item.key #Return item

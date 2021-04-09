@@ -37,26 +37,30 @@ if __name__=="__main__":
     maxHeap.printHeapArrayRepresentation()
     maxHeap.insert(data[3], data[3]["userId"])
     maxHeap.printHeapArrayRepresentation()
+    #Increase key
+    print("Increase key of i=2 to 20")
+    maxHeap.change_key(2, 20)
+    maxHeap.printHeapArrayRepresentation()
     #Get max
-    maxOfHeap = maxHeap.maximum()
-    print("Max of heap value", maxOfHeap)
+    maxValue, maxKey = maxHeap.maximum()
+    print("Max of heap value", maxValue, "key", maxKey)
     print()
     #Extract 2 maxes
     print("Extract 2 max")
     print()
-    maxOfHeap1 = maxHeap.extract_max()
+    maxValue1, maxKey1 = maxHeap.extract_max()
     maxHeap.printHeapArrayRepresentation()
-    maxOfHeap2 = maxHeap.extract_max()
+    maxValue2, maxKey2 = maxHeap.extract_max()
     maxHeap.printHeapArrayRepresentation()
-    print("Max of heap 1", maxOfHeap1.value, "key", maxOfHeap1.key)
-    print("Max of heap 2", maxOfHeap2.value, "key", maxOfHeap2.key)
+    print("Max of heap 1", maxValue1, "key", maxKey1)
+    print("Max of heap 2", maxValue2, "key", maxKey2)
 
     print("MIN HEAP")
     print("---------------------------------------------")
     #Generate min heap
     minHeap = binaryHeap.BinaryMinHeap()
     #Insert all of array
-    maxHeap.printHeapArrayRepresentation()
+    minHeap.printHeapArrayRepresentation()
     minHeap.insert(data[0], data[0]["userId"])
     minHeap.printHeapArrayRepresentation()
     minHeap.insert(data[1], data[1]["userId"])
@@ -65,19 +69,23 @@ if __name__=="__main__":
     minHeap.printHeapArrayRepresentation()
     minHeap.insert(data[3], data[3]["userId"])
     minHeap.printHeapArrayRepresentation()
+    #Decrease key
+    print("Decrease key of i=3 to -10")
+    minHeap.change_key(3, -10)
+    minHeap.printHeapArrayRepresentation()
     #Get min
-    minOfHeap = minHeap.minimum()
-    print("Min of heap value", minOfHeap)
+    minValue, minKey = minHeap.minimum()
+    print("Min of heap value", minValue, "key", minKey)
     print()
     #Extract 2 min
-    print("Extract 2 max")
+    print("Extract 2 min")
     print()
-    minOfHeap1 = minHeap.extract_min()
+    minValue1, minKey1 = minHeap.extract_min()
     minHeap.printHeapArrayRepresentation()
-    minOfHeap2 = minHeap.extract_min()
+    minValue2, minKey2 = minHeap.extract_min()
     minHeap.printHeapArrayRepresentation()
-    print("Min of heap 1", minOfHeap1.value, "key", minOfHeap1.key)
-    print("Min of heap 2", minOfHeap2.value, "key", minOfHeap2.key)
+    print("Min of heap 1", minValue1, "key", minKey1)
+    print("Min of heap 2", minValue2, "key", minKey2)
 
     #Exit execution
     sys.exit(0)
