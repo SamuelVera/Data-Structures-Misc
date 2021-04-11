@@ -1,5 +1,4 @@
 import math #Math import
-from typing import List #Types
 
 class HeapNode:
     """Node of a heap
@@ -42,7 +41,7 @@ class BinaryHeap:
     """
     
     #Heap initialization
-    A = List[HeapNode]
+    A = []
     size = 0
     isMax = True
 

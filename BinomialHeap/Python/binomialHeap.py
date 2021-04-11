@@ -1,5 +1,4 @@
 import math #Math library
-from typing import List #Types
 
 class HeapNode:
     """Node of a heap
@@ -38,7 +37,7 @@ class BinomialTree:
         Add given node as last of list
     """
     order = 0 #Order of the tree
-    children = list #Childrens of the tree are heap nodes
+    children = [] #Childrens of the tree are heap nodes
 
     def __init__(self, root: HeapNode):
         """Constructor for binomial tree class"""
@@ -73,7 +72,7 @@ class BinomialHeap:
         Initializes the heap
     """
 
-    trees = List[BinomialTree] #Trees of the heap
+    trees = [] #Trees of the heap
 
     def make_heap(self):
         """Initialize the heap"""
