@@ -110,6 +110,18 @@ class CircularLinkedList(LinkedList):
         super(CircularLinkedList, self).__init__() #Empty init
         self.tail = None #Tail empty init
 
+    def print(self):
+        x = self.head
+        print("Head", x.value if x != None else None)
+        print("Tail", self.tail.value if self.tail != None else None)
+
+        while x != None:
+            print("current node:", x.value, "next node:", x.nextNode.value)
+            x = x.nextNode
+            if x == self.head:
+                print()
+                return
+
     def listSearch(self, key):
         """Look for the first element with the given key, override for circular linked list"""
         x = self.head #Get head
@@ -118,18 +130,21 @@ class CircularLinkedList(LinkedList):
             if x == self.head: #Back in the head again
                 return None #Means node doesn't exist
 
-        return x #Node found
+        return x.value #Node found
 
     def listInsert(self, value, key):
         """Insert element as first, override for circular linked list """
-        x = LinkedListNode(value, key, self.head) #Create node with head as next
+        x = LinkedListNode(value, key) #Create node with head as next
 
         if self.head == None: #List was empty
-            self.tail = x #Set as tail
+            self.tail = x #Set as tail and head
+            self.head = x 
+            self.tail.nextNode = self.head #Point to self as head and tail
+            self.head.nextNode = self.tail
         else: #List wasn't empty
             self.tail.nextNode = x #Set as next of tail
-        
-        self.head = x #Set as head
+            x.nextNode = self.head #Set current head as next
+            self.head = x #Change head
 
     def listDelete(self, key):
         """Delete the first element with the given key, override for circular linked list"""
@@ -169,16 +184,36 @@ class CircularDoubleLinkedList(CircularLinkedList):
     def __init__(self):
         super(CircularDoubleLinkedList, self).__init__() #Empty init
 
+    def print(self):
+        x = self.head
+        print("Head", x.value if x != None else None)
+        print("Tail", self.tail.value if self.tail != None else None)
+
+        while x != None:
+            print("previous node:", x.previousNode.value, "current node:", x.value, "next node:", x.nextNode.value)
+            x = x.nextNode
+            if x == self.head:
+                print()
+                return
+
+
     def listInsert(self, value, key):
         """Insert element as first, override for circular double linked list """
-        x = DoubleLinkedListNode(value, key, self.head, self.tail) #Create node with head as next and tail as previous
+        x = DoubleLinkedListNode(value, key) #Create node with head as next and tail as previous
 
         if self.head == None: #List was empty
             self.tail = x #Set as tail
+            self.head = x #Set as head
+            self.tail.nextNode = x #Set pointer to self
+            self.tail.previousNode = x
+            self.head.nextNode = x
+            self.head.previousNode = x
         else: #List wasn't empty
-            self.tail.nextNode = x #Set as next of tail
-
-        self.head = x #Set as head
+            self.tail.nextNode = x #Set tail next to given node
+            self.head.previousNode = x #Set previous of head to given node
+            x.nextNode = self.head #Set next as current head
+            x.previousNode = self.tail #Set previous as tail
+            self.head = x #Change head
 
     def listDelete(self, key):
         """Delete the first element with the given key, override for circular double linked list"""
@@ -190,9 +225,9 @@ class CircularDoubleLinkedList(CircularLinkedList):
                     self.head = None #Empty head
                     self.tail = None #Empty tail
                 else: #Head was not alone
-                    self.head = x.nextNode #New head is next of previous head
-                    self.head.previousNode = self.tail #Point previous of new head to tail
-                    self.tail.nextNode = self.head #Point next tail to new head
+                    x.nextNode.previousNode = self.tail #Move next ref for prev to the tail
+                    x.previousNode.nextNode = x.nextNode #Move tail next ref to the new head
+                    self.head = x.nextNode #Change head
                 x.nextNode = None #Remove next reference from previous head
                 x.previousNode = None #Remove previous reference from previous head
                 return x #Return Node
