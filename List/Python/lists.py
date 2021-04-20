@@ -16,6 +16,15 @@ class LinkedList():
     def __init__(self):
         self.head = None #Empty init
 
+    def print(self):
+        x = self.head
+        print("head", x.key if x != None else "None")
+        while x != None:
+            nextNode = x.nextNode
+            print('node', x.key, 'next node', nextNode.key if nextNode != None else "None")
+            x = x.nextNode
+        print()
+
     def listSearch(self, key):
         """Search first element with the given key in the list"""
         x = self.head #Get head
@@ -23,7 +32,7 @@ class LinkedList():
         while x != None and x.key != key: #While key hasn't been found and end hasn't been reached
             x = x.nextNode #Move to next node
 
-        return x #Return result None or a node
+        return x.value if x != None else None #Return result None or a node
 
     def listInsert(self, value, key):
         """Insert given element with given key as first of list"""
@@ -35,8 +44,9 @@ class LinkedList():
         x = self.head #Get head
 
         if x != None: #Validate not empty for 1 element border case check
-            if x.nextNode == None and x.key == key: #One element and requested to delete that one
-                self.head = None #Head becomes none
+            if x.key == key: #Requested to delete is the head
+                self.head = x.nextNode #Change head to next
+                x.nextNode = None #Remove next reference
                 return x #Return x
 
         while x != None: #While the end hasn't been reached
@@ -52,6 +62,16 @@ class DoubleLinkedList(LinkedList):
     def __init__(self):
         super(DoubleLinkedList, self).__init__() #Init empty
 
+    def print(self):
+        x = self.head
+        print("head", x.key if x != None else "None")
+        while x != None:
+            previousNode = x.previousNode
+            nextNode = x.nextNode
+            print('previous node', previousNode.key if previousNode != None else "None", 'node', x.key, 'next node', nextNode.key if nextNode != None else "None")
+            x = x.nextNode
+        print()
+
     def listInsert(self, value, key):
         """Insert as first, overriding for double linked list"""
         x = DoubleLinkedListNode(value, key, self.head)
@@ -65,15 +85,20 @@ class DoubleLinkedList(LinkedList):
         x = self.head #Get head
 
         if x != None: #Validate not empty for 1 element border case check
-            if x.nextNode == None and x.key == key: #One element and requested to delete that one
-                self.head = None #Head becomes none
+            if x.key == key: #One element and requested to delete is the head
+                self.head = x.nextNode #Head becomes next
+                if self.head != None: #If the head was not alone
+                    self.head.previousNode = None #Remove reference of new to head to previous head
+                x.nextNode = None #Remove next reference
+                x.previousNode = None #Remove previous reference
                 return x #Return x
 
         while x != None: #While the end hasn't been reached
             nextNode = x.nextNode #Next node
             if nextNode.key == key: #Found the given key
                 x.nextNode = nextNode.nextNode #Move reference from next node to the one next
-                x.nextNode.previousNode = nextNode.previousNode #Move next next node previous reference to current
+                if x.nextNode != None: #Not pointing to the abyss
+                    x.nextNode.previousNode = nextNode.previousNode #Move next next node previous reference to current
                 nextNode.nextNode = None #Remove next reference
                 nextNode.previousNode = None #Remove previous reference
                 return nextNode #Return node
@@ -111,12 +136,15 @@ class CircularLinkedList(LinkedList):
         x = self.head #Get head
 
         if x != None: #Check not None for 1 element border case checking
-            if self.head == self.tail and x.key == key: #Head is tail, only one element, and requested to delete this element
-                self.head = None #Empty head
-                self.tail = None #Empty tail
-                x.nextNode = None #Remove next reference
-                return x #Return Node
-
+            if x.key == key: #Head is the requested to be deleted
+                if self.head == self.tail: #If head was alone
+                    self.head = None #Empty head
+                    self.tail = None #Empty tail
+                else:
+                    self.head = x.nextNode #Head becomes next
+                    self.tail.nextNode = self.head #Move tail next reference to new head
+                x.nextNode = None #Remove next reference from previous head
+                return x #Return Previous head
 
         while x != None: #While end hasn't been reached
             nextNode = x.nextNode #Get next node
@@ -157,11 +185,16 @@ class CircularDoubleLinkedList(CircularLinkedList):
         x = self.head #Get head
 
         if x != None: #Check not None for 1 element border case checking
-            if self.head == self.tail and x.key == key: #Head is tail, only one element, and requested to delete this element
-                self.head = None #Empty head
-                self.tail = None #Empty tail
-                x.nextNode = None #Remove next reference
-                x.previousNode = None #Remove previous reference
+            if x.key == key: #Head is the element requested to be deleted
+                if self.head == self.tail: #Head is alone
+                    self.head = None #Empty head
+                    self.tail = None #Empty tail
+                else: #Head was not alone
+                    self.head = x.nextNode #New head is next of previous head
+                    self.head.previousNode = self.tail #Point previous of new head to tail
+                    self.tail.nextNode = self.head #Point next tail to new head
+                x.nextNode = None #Remove next reference from previous head
+                x.previousNode = None #Remove previous reference from previous head
                 return x #Return Node
 
 
