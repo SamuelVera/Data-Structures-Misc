@@ -174,7 +174,6 @@ class BinaryMaxHeap(BinaryHeap):
 
         return item.value, item.key #Return item
 
-
 class BinaryMinHeap(BinaryHeap):
     """Binary max heap
 
